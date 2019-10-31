@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto11
+  pre_build:
+    commands:
+      - echo In pre_build phase.  Nothing to do
+  build:
+    commands:
+      - echo Build stage started at `date`
+      - mvn package spring-boot:repackage
+  post_build:
+    commands:
+      - echo Build finished at `date`
+artifacts:
+  files:
+    - target/clientLibrary-1.0-SNAPSHOT.jar
