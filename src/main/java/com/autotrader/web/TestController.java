@@ -4,14 +4,21 @@ import com.autotrader.web.client.BrokerCall;
 import com.autotrader.web.client.robinhood.RobinhoodFactory;
 import com.autotrader.web.client.robinhood.authorization.request.LoginData;
 import com.autotrader.web.client.robinhood.authorization.response.Token;
+import com.autotrader.web.model.TestModel;
+import com.autotrader.web.model.TestResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class TestController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestController.class);
 
@@ -34,40 +41,55 @@ public class TestController {
     private String robinhoodPassword;
 
     @RequestMapping("/testServices")
-    public String testServices() {
-        LOGGER.warn("REST endpoint invoked: /testServices");
+    public TestModel testServices() {
+        LOGGER.info("REST endpoint invoked: /testServices  Running Tests:");
 
+        List<TestResult> results = new ArrayList<>();
         int pass = 0;
         int fail = 0;
 
-        String result = "Successfully invoked endpoint.  Running tests: \n";
-
+        TestResult loginResult = new TestResult();
+        loginResult.setTest("LOGIN");
         if (testLogin()) {
-            result += "Login: PASSED\n";
+            loginResult.setResult("PASSED");
+            LOGGER.info("Login: PASSED");
             pass++;
         } else {
-            result += "Login: FAILED\n";
+            loginResult.setResult("FAILED");
+            LOGGER.info("Login: FAILED");
             fail++;
         }
+        results.add(loginResult);
 
+        TestResult parameterStoreResult = new TestResult();
+        parameterStoreResult.setTest("PARAMETER STORE");
         if (testParameterStore()) {
-            result += "Parameter Store: PASSED\n";
+            parameterStoreResult.setResult("PASSED");
+            LOGGER.info("Parameter Store: PASSED");
             pass++;
         } else {
-            result += "Parameter Store: FAILED\n";
+            parameterStoreResult.setResult("FAILED");
+            LOGGER.info("Parameter Store: FAILED");
             fail++;
         }
+        results.add(parameterStoreResult);
 
         //Add in calls to different test functionality and add to result string and counters.
 
+        String overallResults;
         if (pass == 0 && fail == 0) {
-            result += "WARNING: No tests ran.";
+            overallResults = "WARNING: No tests ran.";
+            LOGGER.info("WARNING: No tests ran.");
         } else {
-            result += "Completed running tests.  Passed: " + pass + " Failed: " + fail;
+            overallResults = "Completed running tests.  Passed: " + pass + " Failed: " + fail;
+            LOGGER.info("Completed running tests.  Passed: " + pass + " Failed: " + fail);
         }
 
-        LOGGER.warn("Test Services endpoint result: " + result);
-        return result;
+        TestModel testModel = new TestModel();
+        testModel.setResults(results);
+        testModel.setOverallResults(overallResults);
+
+        return testModel;
     }
 
     private boolean testLogin() {
