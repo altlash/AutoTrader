@@ -1,0 +1,10 @@
+<app-button
+  text="Run Tests"
+  (btnClick)="runTests()"
+></app-button>
+<div *ngIf="results">
+  <p *ngFor="let result of results.results">{{ result.test }} : {{ result.result }}</p>
+  <p>
+    {{ results.overallResults }}
+  </p>
+</div>
