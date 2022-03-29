@@ -6,13 +6,13 @@ As this software is being developed, there are design decisions that may not be 
 I am also recording all of the coding and uploading to my [YouTube channel](https://www.youtube.com/channel/UCz01y1iZGnSbk7RvTb6Lz6A).  Software developers can join in and recreate this same platform step by step, including the AWS infrastructure.
 
 # Future Items
-- [] Fill out Robinhood integrations
-    - [] View accounts and positions
-    - [] Submit Buy order
-    - [] Submit Sell order
-- [] Integrate with other trading platforms
-- [] Stream live data
-- [] Implement basic trading algorithm
+[] Fill out Robinhood integrations
+    [] View accounts and positions
+    [] Submit Buy order
+    [] Submit Sell order
+[] Integrate with other trading platforms
+[] Stream live data
+[] Implement basic trading algorithm
 
 # Running Locally (Can see how via YouTube channel videos)
 - Set up AWS tokens in run configurations
